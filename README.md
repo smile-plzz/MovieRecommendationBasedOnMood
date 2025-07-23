@@ -8,10 +8,11 @@ This is a web-based application that suggests movies to users based on their cur
     ```bash
     git clone https://github.com/your-username/movie-recommendation-based-on-mood.git
     ```
-2.  **Get an OMDB API Key:**
-    - Go to [http://www.omdbapi.com/apikey.aspx](http://www.omdbapi.com/apikey.aspx) and get a free API key.
-3.  **Add your API Key:**
-    - Open the `script.js` file and replace `'YOUR_API_KEY'` with your actual OMDB API key.
+2.  **Get API Keys:**
+    -   **OMDB API Key:** Go to [http://www.omdbapi.com/apikey.aspx](http://www.omdbapi.com/apikey.aspx) and get a free API key.
+    -   **TMDB API Key:** Go to [https://www.themoviedb.org/settings/api](https://www.themoviedb.org/settings/api) and request a v3 API key.
+3.  **Add your API Keys:**
+    - Open the `script.js` file and replace the placeholder API keys with your actual OMDB and TMDB API keys.
 
 ## Usage
 
