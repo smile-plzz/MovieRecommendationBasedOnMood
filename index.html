@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation Based on Mood</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Movie Recommendation Based on Mood</h1>
+        <div class="mood-selector">
+            <button class="mood-btn" data-mood="Happy">Happy</button>
+            <button class="mood-btn" data-mood="Sad">Sad</button>
+            <button class="mood-btn" data-mood="Excited">Excited</button>
+            <button class="mood-btn" data-mood="Relaxed">Relaxed</button>
+            <button class="mood-btn" data-mood="Angry">Angry</button>
+            <button class="mood-btn" data-mood="Scared">Scared</button>
+            <button class="mood-btn" data-mood="Inspired">Inspired</button>
+            <button class="mood-btn" data-mood="Nostalgic">Nostalgic</button>
+            <button class="mood-btn" data-mood="Curious">Curious</button>
+            <button class="mood-btn" data-mood="Romantic">Romantic</button>
+            <button class="mood-btn" data-mood="Adventurous">Adventurous</button>
+            <button class="mood-btn" data-mood="Thoughtful">Thoughtful</button>
+        </div>
+        <div id="movie-recommendations"></div>
+        <div id="search-history">
+            <h2>Recent Searches</h2>
+            <ul id="history-list"></ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
