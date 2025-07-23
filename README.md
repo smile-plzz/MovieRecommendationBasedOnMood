@@ -49,3 +49,8 @@ This project's development is tracked through the following files:
 -   `CONTEXT_LOG.md`: Contains the history of conversations and key decisions.
 -   `DEVELOPMENT_LOG.md`: Tracks the technical progress and changes to the codebase.
 -   `CONFIG_LOG.md`: Logs changes to the `config.json` file.
+
+### Recent Updates (2025-07-23)
+
+-   **Syntax Error Resolution**: Fixed `Uncaught SyntaxError: await is only valid in async functions and the top level bodies of modules` in `script.js` by ensuring `await` is used within `async` functions.
+-   **Codebase Cleanup**: Initiated cleanup of `script.js` to remove significant code duplication and improve overall code stability and readability. This is an ongoing effort to resolve issues with movie display.
