@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 id="movie-title">Loading Movie Details...</h1>
+        <div id="movie-details-content">
+            <!-- Movie details will be loaded here -->
+        </div>
+        <p><a href="index.html">Back to Recommendations</a></p>
+    </div>
+
+    <script>
+        const omdbApiKey = 'f5dad388'; // OMDB API key
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const imdbID = urlParams.get('imdbID');
+
+            if (imdbID) {
+                try {
+                    const response = await fetch(`http://www.omdbapi.com/?apikey=${omdbApiKey}&i=${imdbID}&plot=full`);
+                    const movie = await response.json();
+
+                    if (movie.Response === "True") {
+                        document.getElementById('movie-title').textContent = `${movie.Title} (${movie.Year})`;
+                        document.getElementById('movie-details-content').innerHTML = `
+                            <img src="${movie.Poster}" alt="${movie.Title} Poster">
+                            <p><strong>Genre:</strong> ${movie.Genre}</p>
+                            <p><strong>Director:</strong> ${movie.Director}</p>
+                            <p><strong>Actors:</strong> ${movie.Actors}</p>
+                            <p><strong>Plot:</strong> ${movie.Plot}</p>
+                            <p><strong>IMDb Rating:</strong> ${movie.imdbRating}</p>
+                            <button id="google-search-btn" class="mood-btn">Google Search</button>
+                        `;
+
+                        // Add event listener for Google Search button
+                        document.getElementById('google-search-btn').addEventListener('click', () => {
+                            const movieTitle = movie.Title;
+                            const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(movieTitle + ' movie')}`;
+                            window.open(googleSearchUrl, '_blank');
+                        });
+                    } else {
+                        document.getElementById('movie-title').textContent = 'Movie Not Found';
+                        document.getElementById('movie-details-content').innerHTML = `<p>${movie.Error}</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching movie details:', error);
+                    document.getElementById('movie-title').textContent = 'Error';
+                    document.getElementById('movie-details-content').innerHTML = `<p>An error occurred while loading movie details.</p>`;
+                }
+            } else {
+                document.getElementById('movie-title').textContent = 'No Movie Selected';
+                document.getElementById('movie-details-content').innerHTML = `<p>Please select a movie from the recommendations page.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

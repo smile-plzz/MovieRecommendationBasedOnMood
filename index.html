@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Recommendation Based on Mood</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
@@ -23,12 +24,27 @@
             <button class="mood-btn" data-mood="Adventurous">Adventurous</button>
             <button class="mood-btn" data-mood="Thoughtful">Thoughtful</button>
         </div>
+        <div class="controls">
+            <label for="sort-by">Sort by:</label>
+            <select id="sort-by">
+                <option value="popularity">Popularity</option>
+                <option value="title">Title</option>
+                <option value="year">Year</option>
+            </select>
+
+            <label for="filter-text">Filter:</label>
+            <input type="text" id="filter-text" placeholder="Filter by title...">
+        </div>
         <div id="movie-recommendations"></div>
+        <button id="load-more-btn" class="mood-btn" style="display: none; margin-top: 1.5rem;">Load More</button>
         <div id="search-history">
             <h2>Recent Searches</h2>
             <ul id="history-list"></ul>
         </div>
     </div>
+
+    
+
     <script src="script.js"></script>
 </body>
 </html>

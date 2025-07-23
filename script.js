@@ -110,7 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const validOmdbMovies = omdbMovies.filter(movie => movie.Response === "True");
 
                 if (validOmdbMovies.length > 0) {
-                    displayMovies(validOmdbMovies);
+                    currentMovies = validOmdbMovies; // Store all valid movies
+                    applyFiltersAndSort(); // Display and apply filters/sort
                     addToHistory(mood, genres.join(', '));
                 } else {
                     movieRecommendations.innerHTML = `<p>Could not find detailed movie information for the mood: ${mood}. Please try another.</p>`;
@@ -124,20 +125,63 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function displayMovies(movies) {
+    let currentMovies = []; // Store the currently fetched movies
+
+    function displayMovies(moviesToDisplay) {
         movieRecommendations.innerHTML = '';
-        const randomMovies = movies.sort(() => 0.5 - Math.random()).slice(0, 5);
-        randomMovies.forEach(movie => {
+        if (moviesToDisplay.length === 0) {
+            movieRecommendations.innerHTML = '<p>No movies found matching your criteria.</p>';
+            return;
+        }
+
+        moviesToDisplay.forEach(movie => {
             const movieCard = document.createElement('div');
             movieCard.classList.add('movie-card');
             movieCard.innerHTML = `
                 <img src="${movie.Poster}" alt="${movie.Title} Poster">
                 <h3>${movie.Title}</h3>
                 <p>${movie.Year}</p>
+                <p><strong>Genre:</strong> ${movie.Genre}</p>
             `;
+            movieCard.dataset.imdbid = movie.imdbID; // Store IMDb ID
+            movieCard.addEventListener('click', () => {
+                window.location.href = `movie-details.html?imdbID=${movie.imdbID}`;
+            });
             movieRecommendations.appendChild(movieCard);
         });
     }
+
+    function applyFiltersAndSort() {
+        let filteredMovies = [...currentMovies];
+
+        // Apply filter
+        const filterText = filterTextInput.value.toLowerCase();
+        if (filterText) {
+            filteredMovies = filteredMovies.filter(movie =>
+                movie.Title.toLowerCase().includes(filterText)
+            );
+        }
+
+        // Apply sort
+        const sortBy = sortBySelect.value;
+        if (sortBy === 'title') {
+            filteredMovies.sort((a, b) => a.Title.localeCompare(b.Title));
+        } else if (sortBy === 'year') {
+            filteredMovies.sort((a, b) => parseInt(b.Year) - parseInt(a.Year));
+        }
+        // For 'popularity', we'll rely on the initial TMDB sort, or add a custom sort if needed.
+        // For now, 'popularity' will just display the order as received from TMDB after filtering.
+
+        displayMovies(filteredMovies);
+    }
+
+    // Get sort and filter elements
+    const sortBySelect = document.getElementById('sort-by');
+    const filterTextInput = document.getElementById('filter-text');
+
+    // Event Listeners for sort and filter
+    sortBySelect.addEventListener('change', applyFiltersAndSort);
+    filterTextInput.addEventListener('input', applyFiltersAndSort);
 
     function addToHistory(mood, genres) {
         const historyItem = document.createElement('li');

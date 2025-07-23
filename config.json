@@ -1,68 +1,68 @@
 {
     "moodGenreMapping": {
         "Happy": {
-            "genres": ["Comedy", "Adventure", "Musical", "Romantic Comedy", "Family", "Animation"],
-            "keywords": ["funny", "uplifting", "joyful", "lighthearted", "cheerful", "feel-good"]
+            "genres": ["Comedy", "Adventure", "Family", "Animation", "Musical", "Romance"],
+            "keywords": ["funny", "uplifting", "joyful", "lighthearted", "cheerful", "feel-good", "optimistic", "heartwarming"]
         },
         "Sad": {
-            "genres": ["Drama", "Romance", "Tragedy", "Melodrama"],
-            "keywords": ["emotional", "heartbreaking", "tearjerker", "poignant", "melancholy"]
+            "genres": ["Drama", "Romance", "Melodrama", "History"],
+            "keywords": ["emotional", "heartbreaking", "tearjerker", "poignant", "melancholy", "somber", "reflective"]
         },
         "Excited": {
-            "genres": ["Action", "Thriller", "Sci-Fi", "Fantasy", "Adventure"],
-            "keywords": ["thrilling", "energetic", "intense", "epic", "adrenaline-pumping"]
+            "genres": ["Action", "Thriller", "Sci-Fi", "Fantasy", "Adventure", "Animation"],
+            "keywords": ["thrilling", "energetic", "intense", "epic", "adrenaline-pumping", "fast-paced", "suspenseful"]
         },
         "Relaxed": {
-            "genres": ["Family", "Animation", "Documentary", "Comedy", "Slice of Life"],
-            "keywords": ["calm", "soothing", "easygoing", "peaceful", "light"]
+            "genres": ["Documentary", "Family", "Animation", "Comedy", "Music"],
+            "keywords": ["calm", "soothing", "easygoing", "peaceful", "light", "comforting", "gentle"]
         },
         "Angry": {
-            "genres": ["Crime", "Western", "War", "Action", "Revenge"],
-            "keywords": ["intense", "gritty", "vengeful", "raw", "confrontational"]
+            "genres": ["Crime", "Thriller", "Action", "Western", "War"],
+            "keywords": ["intense", "gritty", "vengeful", "raw", "confrontational", "rebellious", "dark"]
         },
         "Scared": {
-            "genres": ["Horror", "Mystery", "Thriller", "Supernatural", "Psychological Thriller"],
-            "keywords": ["spooky", "terrifying", "suspenseful", "creepy", "chilling"]
+            "genres": ["Horror", "Mystery", "Thriller", "Science Fiction"],
+            "keywords": ["spooky", "terrifying", "suspenseful", "creepy", "chilling", "frightening", "paranormal"]
         },
         "Inspired": {
-            "genres": ["Biography", "Drama", "Historical", "Sports", "Inspirational"],
-            "keywords": ["motivational", "uplifting", "empowering", "inspirational", "triumphant"]
+            "genres": ["Biography", "Drama", "History", "Sport", "Documentary"],
+            "keywords": ["motivational", "uplifting", "empowering", "inspirational", "triumphant", "courageous", "hopeful"]
         },
         "Nostalgic": {
-            "genres": ["Coming-of-Age", "Period Drama", "Drama", "Classic", "Retro"],
-            "keywords": ["sentimental", "retro", "memories", "bittersweet", "vintage"]
+            "genres": ["Drama", "History", "Romance", "Music", "Family"],
+            "keywords": ["sentimental", "retro", "memories", "bittersweet", "vintage", "reminiscent", "classic"]
         },
         "Curious": {
-            "genres": ["Mystery", "Documentary", "Science Fiction"],
-            "keywords": ["intriguing", "puzzling", "informative", "enigmatic", "exploratory"]
+            "genres": ["Mystery", "Documentary", "Science Fiction", "Adventure"],
+            "keywords": ["intriguing", "puzzling", "informative", "enigmatic", "exploratory", "unraveling", "investigative"]
         },
         "Romantic": {
-            "genres": ["Romance", "Romantic Comedy", "Drama", "Historical Romance"],
-            "keywords": ["love", "passionate", "heartwarming", "romantic", "intimate"]
+            "genres": ["Romance", "Drama", "Comedy", "Music"],
+            "keywords": ["love", "passionate", "heartwarming", "romantic", "intimate", "tender", "charming"]
         },
         "Adventurous": {
-            "genres": ["Adventure", "Fantasy", "Action", "Exploration", "Epic"],
-            "keywords": ["exciting", "daring", "epic", "exploratory", "bold"]
+            "genres": ["Adventure", "Action", "Fantasy", "Science Fiction", "Animation"],
+            "keywords": ["exciting", "daring", "epic", "exploratory", "bold", "thrilling", "journey"]
         },
         "Thoughtful": {
-            "genres": ["Drama", "Art House", "Indie", "Philosophical", "Documentary"],
-            "keywords": ["reflective", "introspective", "deep", "contemplative", "cerebral"]
+            "genres": ["Drama", "Documentary", "Mystery", "Science Fiction", "History"],
+            "keywords": ["reflective", "introspective", "deep", "contemplative", "cerebral", "philosophical", "provocative"]
         },
         "Anxious": {
-            "genres": ["Thriller", "Mystery", "Psychological Thriller", "Drama"],
-            "keywords": ["tense", "nerve-wracking", "uneasy", "suspenseful", "gripping"]
+            "genres": ["Thriller", "Mystery", "Drama", "Crime"],
+            "keywords": ["tense", "nerve-wracking", "uneasy", "suspenseful", "gripping", "stressful", "psychological"]
         },
         "Hopeful": {
-            "genres": ["Drama", "Inspirational", "Family", "Comedy"],
-            "keywords": ["optimistic", "uplifting", "encouraging", "heartwarming", "positive"]
+            "genres": ["Drama", "Family", "Comedy", "Music"],
+            "keywords": ["optimistic", "uplifting", "encouraging", "heartwarming", "positive", "redemptive", "inspiring"]
         },
         "Playful": {
-            "genres": ["Comedy", "Animation", "Family", "Adventure"],
-            "keywords": ["fun", "whimsical", "lighthearted", "silly", "joyful"]
+            "genres": ["Comedy", "Animation", "Family", "Adventure", "Fantasy"],
+            "keywords": ["fun", "whimsical", "lighthearted", "silly", "joyful", "mischievous", "imaginative"]
         },
         "Adult": {
-            "genres": ["Erotica", "Drama", "Thriller", "Crime", "Dark Comedy"],
-            "keywords": ["mature", "provocative", "sensual", "bold", "edgy"]
+            "genres": ["Drama", "Thriller", "Crime", "Mystery"],
+            "keywords": ["mature", "provocative", "sensual", "bold", "edgy", "complex", "gritty"]
         }
     }
 }
