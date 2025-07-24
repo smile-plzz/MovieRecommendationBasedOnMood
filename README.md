@@ -6,7 +6,7 @@ A web-based application that recommends movies to users based on their current m
 
 ## 🚀 Live Demo
 
-> **Coming Soon** – Add your deployed link here once hosted!
+> https://smile-plzz.github.io/MovieRecommendationBasedOnMood/)
 
 ---
 
