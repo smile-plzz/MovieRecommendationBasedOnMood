@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Details</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 id="movie-title">Loading Movie Details...</h1>
+        <div class="movie-details-container">
+            <div class="movie-poster-column">
+                <img id="movie-poster" src="" alt="Movie Poster">
+            </div>
+            <div class="movie-info-column">
+                <p><strong>Year:</strong> <span id="movie-year"></span></p>
+                <p><strong>Rated:</strong> <span id="movie-rated"></span></p>
+                <p><strong>Released:</strong> <span id="movie-released"></span></p>
+                <p><strong>Runtime:</strong> <span id="movie-runtime"></span></p>
+                <p><strong>Genre:</strong> <span id="movie-genre"></span></p>
+                <p><strong>Director:</strong> <span id="movie-director"></span></p>
+                <p><strong>Writer:</strong> <span id="movie-writer"></span></p>
+                <p><strong>Actors:</strong> <span id="movie-actors"></span></p>
+                <p><strong>Plot:</strong> <span id="movie-plot"></span></p>
+                <p><strong>Language:</strong> <span id="movie-language"></span></p>
+                <p><strong>Country:</strong> <span id="movie-country"></span></p>
+                <p><strong>Awards:</strong> <span id="movie-awards"></span></p>
+                <p><strong>IMDb Rating:</strong> <span id="movie-imdb-rating"></span></p>
+                <p><strong>IMDb Votes:</strong> <span id="movie-imdb-votes"></span></p>
+                <p><strong>Metascore:</strong> <span id="movie-metascore"></span></p>
+                <div id="movie-ratings"></div>
+                <p><strong>DVD Release:</strong> <span id="movie-dvd"></span></p>
+                <p><strong>Production:</strong> <span id="movie-production"></span></p>
+                <p><strong>Website:</strong> <span id="movie-website"></span></p>
+                <p><strong>Box Office:</strong> <span id="movie-box-office"></span></p>
+                <div class="detail-buttons">
+                    <button id="google-search-btn" class="mood-btn">Google Search</button>
+                    <button id="share-btn" class="mood-btn">Share</button>
+                    <button id="add-to-favorites-btn" class="mood-btn">Add to Favorites</button>
+                </div>
+            </div>
+        </div>
+        <p><a href="index.html">Back to Recommendations</a></p>
+    </div>
+
+    <script>
+        // These would ideally be injected by a build process or server-side for production
+        // For local development, you can replace 'YOUR_OMDB_API_KEY' and 'YOUR_TMDB_API_KEY'
+        window.OMDB_API_KEY = '1a944117'; // Set your OMDB API key here
+
+        const omdbApiKey = window.OMDB_API_KEY || 'YOUR_OMDB_API_KEY'; // Use global API key or fallback
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const imdbID = urlParams.get('imdbID');
+
+            if (imdbID) {
+                try {
+                    const response = await fetch(`https://www.omdbapi.com/?apikey=${omdbApiKey}&i=${imdbID}&plot=full`);
+                    const movie = await response.json();
+
+                    if (movie.Response === "True") {
+                        document.getElementById('movie-title').textContent = `${movie.Title}`;
+                        document.getElementById('movie-poster').src = movie.Poster.replace('http://', 'https://');
+                        document.getElementById('movie-poster').alt = `${movie.Title} Poster`;
+                        document.getElementById('movie-year').textContent = movie.Year;
+                        document.getElementById('movie-rated').textContent = movie.Rated;
+                        document.getElementById('movie-released').textContent = movie.Released;
+                        document.getElementById('movie-runtime').textContent = movie.Runtime;
+                        document.getElementById('movie-genre').textContent = movie.Genre;
+                        document.getElementById('movie-director').textContent = movie.Director;
+                        document.getElementById('movie-writer').textContent = movie.Writer;
+                        document.getElementById('movie-actors').textContent = movie.Actors;
+                        document.getElementById('movie-plot').textContent = movie.Plot;
+                        document.getElementById('movie-language').textContent = movie.Language;
+                        document.getElementById('movie-country').textContent = movie.Country;
+                        document.getElementById('movie-awards').textContent = movie.Awards;
+                        document.getElementById('movie-imdb-rating').textContent = movie.imdbRating;
+                        document.getElementById('movie-imdb-votes').textContent = movie.imdbVotes;
+                        document.getElementById('movie-metascore').textContent = movie.Metascore;
+                        document.getElementById('movie-dvd').textContent = movie.DVD;
+                        document.getElementById('movie-production').textContent = movie.Production;
+                        document.getElementById('movie-website').textContent = movie.Website;
+                        document.getElementById('movie-box-office').textContent = movie.BoxOffice;
+
+                        // Display additional ratings
+                        const ratingsDiv = document.getElementById('movie-ratings');
+                        if (movie.Ratings && movie.Ratings.length > 0) {
+                            movie.Ratings.forEach(rating => {
+                                const p = document.createElement('p');
+                                p.innerHTML = `<strong>${rating.Source}:</strong> ${rating.Value}`;
+                                ratingsDiv.appendChild(p);
+                            });
+                        } else {
+                            ratingsDiv.innerHTML = '<p><strong>Ratings:</strong> N/A</p>';
+                        }
+
+                        // Add event listener for Google Search button
+                        document.getElementById('google-search-btn').addEventListener('click', () => {
+                            const movieTitle = movie.Title;
+                            const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(movieTitle + ' movie')}`;
+                            window.open(googleSearchUrl, '_blank');
+                        });
+
+                        // Add event listener for Share button
+                        document.getElementById('share-btn').addEventListener('click', async () => {
+                            try {
+                                await navigator.clipboard.writeText(window.location.href);
+                                alert('Link copied to clipboard!');
+                            } catch (err) {
+                                console.error('Failed to copy: ', err);
+                                alert('Failed to copy link.');
+                            }
+                        });
+
+                        // Add event listener for Add to Favorites button
+                        const favoritesBtn = document.getElementById('add-to-favorites-btn');
+                        favoritesBtn.addEventListener('click', () => {
+                            let favorites = JSON.parse(localStorage.getItem('favoriteMovies')) || [];
+                            const movieData = {
+                                imdbID: movie.imdbID,
+                                Title: movie.Title,
+                                Year: movie.Year,
+                                Poster: movie.Poster
+                            };
+
+                            if (favorites.some(fav => fav.imdbID === movie.imdbID)) {
+                                favorites = favorites.filter(fav => fav.imdbID !== movie.imdbID);
+                                favoritesBtn.textContent = 'Add to Favorites';
+                                alert(`${movie.Title} removed from favorites!`);
+                            } else {
+                                favorites.push(movieData);
+                                favoritesBtn.textContent = 'Remove from Favorites';
+                                alert(`${movie.Title} added to favorites!`);
+                            }
+                            localStorage.setItem('favoriteMovies', JSON.stringify(favorites));
+                        });
+
+                        // Check if movie is already in favorites on load
+                        const favorites = JSON.parse(localStorage.getItem('favoriteMovies')) || [];
+                        if (favorites.some(fav => fav.imdbID === movie.imdbID)) {
+                            favoritesBtn.textContent = 'Remove from Favorites';
+                        }
+                    } else {
+                        document.getElementById('movie-title').textContent = 'Movie Not Found';
+                        document.querySelector('.movie-details-container').innerHTML = `<p>${movie.Error}</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching movie details:', error);
+                    document.getElementById('movie-title').textContent = 'Error';
+                    document.getElementById('movie-details-content').innerHTML = `<p>An error occurred while loading movie details.</p>`;
+                }
+            } else {
+                document.getElementById('movie-title').textContent = 'No Movie Selected';
+                document.getElementById('movie-details-content').innerHTML = `<p>Please select a movie from the recommendations page.</p>`;
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+fix: Resolve API key issue on movie details page
+
+This commit addresses the "Invalid API key" error encountered when directly accessing the movie details page.
+
+Key changes include:
+- Ensured `window.OMDB_API_KEY` is correctly set in `movie-details.html` to prevent the API key from falling back to a placeholder.

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendation Based on Mood</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="left-column">
+            <div class="container">
+                <h1>Movie Recommendation Based on Mood</h1>
+                <div class="mood-selector">
+                    <button class="mood-btn" data-mood="Happy">Happy</button>
+                    <button class="mood-btn" data-mood="Sad">Sad</button>
+                    <button class="mood-btn" data-mood="Excited">Excited</button>
+                    <button class="mood-btn" data-mood="Relaxed">Relaxed</button>
+                    <button class="mood-btn" data-mood="Angry">Angry</button>
+                    <button class="mood-btn" data-mood="Scared">Scared</button>
+                    <button class="mood-btn" data-mood="Inspired">Inspired</button>
+                    <button class="mood-btn" data-mood="Nostalgic">Nostalgic</button>
+                    <button class="mood-btn" data-mood="Curious">Curious</button>
+                    <button class="mood-btn" data-mood="Romantic">Romantic</button>
+                    <button class="mood-btn" data-mood="Adventurous">Adventurous</button>
+                    <button class="mood-btn" data-mood="Thoughtful">Thoughtful</button>
+                    <button class="mood-btn" data-mood="Anxious">Anxious</button>
+                    <button class="mood-btn" data-mood="Hopeful">Hopeful</button>
+                    <button class="mood-btn" data-mood="Playful">Playful</button>
+                    <button class="mood-btn" data-mood="Adult">Adult</button>
+                </div>
+                <div class="category-selector">
+                    <h2>Browse by Category</h2>
+                    <div id="category-buttons">
+                        <!-- Category buttons will be loaded here by JavaScript -->
+                    </div>
+                </div>
+                <div class="controls">
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by">
+                        <option value="popularity">Popularity</option>
+                        <option value="title">Title</option>
+                        <option value="year">Year</option>
+                    </select>
+
+                    <label for="filter-text">Filter:</label>
+                    <input type="text" id="filter-text" placeholder="Filter by title...">
+                </div>
+                <div class="general-search">
+                    <input type="text" id="general-search-input" placeholder="Search all movies...">
+                    <button id="general-search-btn" class="mood-btn">Search</button>
+                </div>
+                <div id="movie-recommendations"></div>
+                <button id="load-more-btn" class="mood-btn" style="display: none; margin-top: 1.5rem;">Load More</button>
+
+                <div id="search-history">
+                    <h2>Recent Searches</h2>
+                    <ul id="history-list"></ul>
+                </div>
+            </div>
+        </div>
+
+    <script>
+        // These would ideally be injected by a build process or server-side for production
+        // For local development, you can replace 'YOUR_OMDB_API_KEY' and 'YOUR_TMDB_API_KEY'
+        window.OMDB_API_KEY = '1a944117';
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
