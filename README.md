@@ -28,15 +28,6 @@ A web-based application that recommends movies to users based on their current m
 
 ## ✨ Features
 
-### 🎨 UI/UX Enhancements
-- Refined dark theme for a more immersive experience.
-- Improved typography and layout for better readability and visual hierarchy.
-- Enhanced interactive elements (buttons, input fields) with subtle transitions and shadows.
-- Redesigned movie cards for a cleaner, more engaging presentation.
-- Optimized responsiveness across various devices, ensuring consistent alignment and usability.
-
-
-
 ### 🎭 Mood-Based UI
 - Select moods from a predefined list (e.g., Happy, Sad, Excited, Relaxed).
 - Moods are mapped to relevant movie genres and keywords for recommendations.
@@ -64,6 +55,13 @@ A web-based application that recommends movies to users based on their current m
 ### 🔐 Secure API Integration
 - Uses OMDB API with environment-based key injection.
 - Optimized error handling for failed requests and exceeded rate limits.
+
+### 🎨 UI/UX Enhancements
+- Refined dark theme for a more immersive experience.
+- Improved typography and layout for better readability and visual hierarchy.
+- Enhanced interactive elements (buttons, input fields) with subtle transitions and shadows.
+- Redesigned movie cards for a cleaner, more engaging presentation.
+- Optimized responsiveness across various devices, ensuring consistent alignment and usability.
 
 ---
 
