@@ -119,7 +119,7 @@
                         // Add event listener for Watch Now button
                         document.getElementById('watch-now-btn').addEventListener('click', () => {
                             const movieTitle = movie.Title;
-                            const watchNowUrl = `https://now-showing-mu.vercel.app/?search=${encodeURIComponent(movieTitle)}`;
+                            const watchNowUrl = `https://now-showing-mu.vercel.app/?q=${encodeURIComponent(movieTitle)}`;
                             window.open(watchNowUrl, '_blank');
                         });
 
