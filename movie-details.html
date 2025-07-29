@@ -39,6 +39,7 @@
                     <button id="google-search-btn" class="mood-btn">Google Search</button>
                     <button id="share-btn" class="mood-btn">Share</button>
                     <button id="add-to-favorites-btn" class="mood-btn">Add to Favorites</button>
+                    <button id="watch-now-btn" class="mood-btn">Watch Now</button>
                 </div>
             </div>
         </div>
@@ -113,6 +114,13 @@
                                 console.error('Failed to copy: ', err);
                                 alert('Failed to copy link.');
                             }
+                        });
+
+                        // Add event listener for Watch Now button
+                        document.getElementById('watch-now-btn').addEventListener('click', () => {
+                            const movieTitle = movie.Title;
+                            const watchNowUrl = `https://now-showing-mu.vercel.app/?search=${encodeURIComponent(movieTitle)}`;
+                            window.open(watchNowUrl, '_blank');
                         });
 
                         // Add event listener for Add to Favorites button
