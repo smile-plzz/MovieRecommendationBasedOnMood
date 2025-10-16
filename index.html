@@ -8,10 +8,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="main-wrapper">
+    <header class="app-header">
+        <div class="hero">
+            <h1>Movie Recommendation Based on Mood</h1>
+            <p class="tagline">Find the perfect film that matches how you feel or where you want your mood to go.</p>
+            <div class="hero-tips" role="list">
+                <span role="listitem">🎯 Tip: Pick a mood to instantly curate suggestions.</span>
+                <span role="listitem">🔍 Need something specific? Use the global search below.</span>
+                <span role="listitem">⚡ Save time with quick filters and smart sorting.</span>
+            </div>
+        </div>
+    </header>
+    <main class="main-wrapper">
         <div class="left-column">
             <div class="container">
-                <h1>Movie Recommendation Based on Mood</h1>
+                <div id="selection-summary" class="selection-summary" aria-live="polite">Pick a mood to get started.</div>
+                <div class="status-bar" role="status">
+                    <div id="status-message" class="status-message" aria-live="polite">Awaiting your first selection.</div>
+                    <div class="result-badge" id="result-count-badge" aria-live="polite">0 results</div>
+                    <button id="clear-results-btn" class="ghost-btn" type="button">Clear Results</button>
+                </div>
                 <div class="mood-selector">
                     <button class="mood-btn" data-mood="Happy">Happy</button>
                     <button class="mood-btn" data-mood="Sad">Sad</button>
@@ -30,13 +46,13 @@
                     <button class="mood-btn" data-mood="Playful">Playful</button>
                     <button class="mood-btn" data-mood="Adult">Adult</button>
                 </div>
-                <div class="category-selector">
-                    <h2>Browse by Category</h2>
+                <section class="category-selector" aria-labelledby="category-heading">
+                    <h2 id="category-heading">Browse by Category</h2>
                     <div id="category-buttons">
                         <!-- Category buttons will be loaded here by JavaScript -->
                     </div>
-                </div>
-                <div class="controls">
+                </section>
+                <section class="controls" aria-label="Sort and filter results">
                     <label for="sort-by">Sort by:</label>
                     <select id="sort-by">
                         <option value="popularity">Popularity</option>
@@ -46,12 +62,17 @@
 
                     <label for="filter-text">Filter:</label>
                     <input type="text" id="filter-text" placeholder="Filter by title...">
-                </div>
-                <div class="general-search">
+                    <button id="reset-filters-btn" class="ghost-btn" type="button" aria-label="Reset filters">Reset Filters</button>
+                </section>
+                <section class="general-search" aria-labelledby="general-search-label">
+                    <h2 id="general-search-label">Quick Search</h2>
                     <input type="text" id="general-search-input" placeholder="Search all movies...">
                     <button id="general-search-btn" class="mood-btn">Search</button>
-                </div>
-                <div id="movie-recommendations"></div>
+                </section>
+                <section class="results-section" aria-live="polite">
+                    <h2 class="sr-only">Movie Recommendations</h2>
+                    <div id="movie-recommendations" role="list"></div>
+                </section>
                 <button id="load-more-btn" class="mood-btn" style="display: none; margin-top: 1.5rem;">Load More</button>
 
                 <div id="search-history">
@@ -60,6 +81,7 @@
                 </div>
             </div>
         </div>
+    </main>
 
     <script>
         // These would ideally be injected by a build process or server-side for production

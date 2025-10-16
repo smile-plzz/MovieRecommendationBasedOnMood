@@ -1,12 +1,56 @@
 /* General Styles */
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: #121212; /* Deeper dark background */
+    background: radial-gradient(circle at 20% 20%, rgba(83, 52, 131, 0.4), transparent 55%),
+        radial-gradient(circle at 80% 0%, rgba(233, 69, 96, 0.35), transparent 60%),
+        #121212;
     color: #e0e0e0; /* Light text */
     margin: 0;
     padding: 0;
     line-height: 1.6;
     overflow-x: hidden; /* Prevent horizontal scroll */
+}
+
+.app-header {
+    background: linear-gradient(135deg, rgba(15, 52, 96, 0.7), rgba(233, 69, 96, 0.45));
+    padding: 3.5rem 1.5rem 2.5rem;
+    text-align: center;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(6px);
+}
+
+.hero {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+.tagline {
+    font-size: 1.2rem;
+    color: #f4f4f4;
+    margin-bottom: 1.5rem;
+}
+
+.hero-tips {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    color: #fff;
+}
+
+.hero-tips span {
+    background-color: rgba(18, 18, 18, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    backdrop-filter: blur(3px);
 }
 
 .main-wrapper {
@@ -34,6 +78,86 @@ body {
     max-width: 1200px; /* Max width for content within the container */
     margin: 0 auto; /* Center the container */
     padding: 0; /* Remove padding as it's handled by left-column */
+}
+
+.selection-summary {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f1f1f1;
+    margin-bottom: 1.2rem;
+}
+
+.status-bar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    background: rgba(15, 52, 96, 0.25);
+    border: 1px solid rgba(233, 69, 96, 0.25);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.status-message {
+    flex: 1;
+    font-size: 0.95rem;
+}
+
+.status-message.success {
+    color: #8fd694;
+}
+
+.status-message.warning {
+    color: #ffdd8f;
+}
+
+.status-message.error {
+    color: #ff8f8f;
+}
+
+.status-message.loading {
+    color: #9ac7ff;
+}
+
+.result-badge {
+    background: linear-gradient(45deg, rgba(233, 69, 96, 0.3), rgba(83, 52, 131, 0.45));
+    border-radius: 999px;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+
+.ghost-btn {
+    background: transparent;
+    border: 1px solid rgba(233, 69, 96, 0.45);
+    color: #f5f5f5;
+    padding: 0.6rem 1.4rem;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.ghost-btn:hover,
+.ghost-btn:focus-visible {
+    background: rgba(233, 69, 96, 0.15);
+    border-color: rgba(233, 69, 96, 0.75);
+    color: #fff;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    margin: 0;
+    background: rgba(15, 52, 96, 0.15);
+    border: 1px dashed rgba(233, 69, 96, 0.3);
+    border-radius: 12px;
+    color: #bfc5d2;
+    font-size: 1rem;
 }
 
 /* Mood Selector */
@@ -64,6 +188,12 @@ body {
     background: linear-gradient(45deg, #e94560, #533483);
     transform: translateY(-3px); /* Slightly less pronounced lift */
     box-shadow: 0 8px 20px rgba(233, 69, 96, 0.5); /* Slightly softer shadow on hover */
+}
+
+.mood-btn.active,
+.category-btn.active {
+    box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.35);
+    transform: translateY(-2px);
 }
 
 /* Category Selector */
@@ -143,6 +273,11 @@ body {
     width: 180px; /* Adjusted width */
 }
 
+.controls .ghost-btn {
+    border-radius: 8px;
+    padding: 0.7rem 1.2rem;
+}
+
 .controls select:focus,
 .controls input[type="text"]:focus {
     border-color: #e94560;
@@ -184,6 +319,30 @@ body {
 #general-search-btn {
     padding: 0.8rem 1.8rem; /* Adjusted padding */
     font-size: 1rem; /* Slightly smaller font */
+}
+
+.general-search h2 {
+    width: 100%;
+    margin: 0 0 0.5rem;
+    text-align: left;
+    font-size: 1.4rem;
+    color: #e94560;
+}
+
+.results-section {
+    margin-top: 2rem;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* Movie Recommendations Grid */
@@ -268,6 +427,16 @@ body {
     display: inline-block;
     margin-right: 1rem; /* Adjusted margin */
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15); /* Softer shadow */
+}
+
+button:focus-visible {
+    outline: 3px solid rgba(233, 69, 96, 0.65);
+    outline-offset: 3px;
+}
+
+.movie-card:focus-visible {
+    outline: 3px solid rgba(233, 69, 96, 0.65);
+    outline-offset: 4px;
 }
 
 /* Movie Details Page Specific Styles */
@@ -387,6 +556,14 @@ p a:hover {
 
 /* Responsive Adjustments */
 @media (max-width: 1024px) {
+    .hero h1 {
+        font-size: 2.6rem;
+    }
+
+    .tagline {
+        font-size: 1.05rem;
+    }
+
     .main-wrapper {
         flex-direction: column;
         gap: 1.5rem; /* Adjusted gap */
@@ -462,17 +639,16 @@ p a:hover {
 }
 
 @media (max-width: 768px) {
-    .container {
-        padding: 1.2rem; /* Adjusted padding */
+    .app-header {
+        padding: 2.5rem 1.2rem 1.8rem;
     }
 
-    h1 {
+    .hero h1 {
         font-size: 2.2rem; /* Adjusted font size for smaller screens */
-        color: #e94560;
-        text-align: center;
-        margin-bottom: 1.8rem; /* Adjusted margin */
-        text-shadow: 0 0 10px rgba(233, 69, 96, 0.4);
-        letter-spacing: 0.5px;
+    }
+
+    .container {
+        padding: 1.2rem; /* Adjusted padding */
     }
 
     .mood-btn {
@@ -521,6 +697,14 @@ p a:hover {
 }
 
 @media (max-width: 480px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+
+    .tagline {
+        font-size: 0.95rem;
+    }
+
     .main-wrapper {
         padding: 0.5rem; /* Adjusted padding */
     }
