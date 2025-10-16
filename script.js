@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentPage = 1; // Track current page for OMDB API
     let currentMoodGenres = []; // Store genres of the current mood
+    let currentMoodKey = null; // Track the active mood key for keyword blending
     let displayedMovieIds = new Set(); // Store IMDb IDs of displayed movies to prevent duplicates
 
     // Get sort and filter elements
@@ -98,7 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
     filterTextInput.addEventListener('input', applyFiltersAndSort);
     loadMoreBtn.addEventListener('click', () => {
         currentPage++;
-        findMoviesByGenre(currentMoodGenres, null, currentPage, true); // Pass true to append movies
+        const label = lastSelection.label || (currentMoodGenres[0] || 'selection');
+        findMoviesByGenre(currentMoodGenres, label, currentPage, true, currentMoodKey); // Pass true to append movies
     });
 
     clearResultsBtn.addEventListener('click', () => {
@@ -118,6 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const searchTerm = generalSearchInput.value.trim();
         if (searchTerm) {
             resetActiveStates();
+            currentMoodKey = null;
+            currentMoodGenres = [];
             setLastSelection('search', searchTerm);
             updateStatus(`Searching for "${searchTerm}"...`, 'loading');
             searchAllMovies(searchTerm);
@@ -129,6 +133,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const searchTerm = generalSearchInput.value.trim();
             if (searchTerm) {
                 resetActiveStates();
+                currentMoodKey = null;
+                currentMoodGenres = [];
                 setLastSelection('search', searchTerm);
                 updateStatus(`Searching for "${searchTerm}"...`, 'loading');
                 searchAllMovies(searchTerm);
@@ -147,8 +153,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     updateStatus(`Fetching top picks for a ${mood.toLowerCase()} mood...`, 'loading');
                     currentPage = 1; // Reset page for new mood search
                     currentMoodGenres = genres; // Store current genres
+                    currentMoodKey = mood;
                     displayedMovieIds.clear(); // Clear displayed movies for new mood
-                    findMoviesByGenre(genres, mood, currentPage, false); // Pass false to overwrite movies
+                    findMoviesByGenre(genres, mood, currentPage, false, mood); // Pass false to overwrite movies
                 } else {
                     movieRecommendations.innerHTML = `<p class="empty-state">No genres found for the mood: ${mood}.</p>`;
                     updateStatus(`No genres configured for the mood "${mood}".`, 'warning');
@@ -179,66 +186,104 @@ document.addEventListener('DOMContentLoaded', () => {
                 updateStatus(`Exploring movies in the ${genre} category...`, 'loading');
                 currentPage = 1;
                 currentMoodGenres = [genre]; // Treat single genre as an array for consistency
+                currentMoodKey = null;
                 displayedMovieIds.clear();
-                findMoviesByGenre([genre], genre, currentPage, false); // Pass genre as both genres array and mood for history
+                findMoviesByGenre([genre], genre, currentPage, false, null); // Pass genre as both genres array and mood for history
             });
             categoryButtonsContainer.appendChild(button);
         });
     }
 
-    async function findMoviesByGenre(genres, mood, page = 1, append = false) {
+    const MAX_GENRE_TERMS = 3;
+    const MAX_KEYWORD_TERMS = 2;
+
+    function getSearchTerms(genres, moodKey) {
+        const uniqueGenres = Array.from(new Set(genres));
+        const primaryGenres = uniqueGenres.slice(0, MAX_GENRE_TERMS);
+        const keywords = moodKey && moodGenreMapping[moodKey]?.keywords
+            ? moodGenreMapping[moodKey].keywords.slice(0, MAX_KEYWORD_TERMS)
+            : [];
+        return Array.from(new Set([...primaryGenres, ...keywords])).filter(Boolean);
+    }
+
+    async function searchOmdbByTerm(term, pageNumber) {
+        const url = `https://www.omdbapi.com/?apikey=${omdbApiKey}&s=${encodeURIComponent(term)}&type=movie&page=${pageNumber}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.Response === "True" && data.Search) {
+            return {
+                movies: data.Search,
+                totalResults: parseInt(data.totalResults, 10) || data.Search.length
+            };
+        }
+        return { movies: [], totalResults: 0 };
+    }
+
+    async function findMoviesByGenre(genres, mood, page = 1, append = false, moodKey = null) {
         if (!append) {
             movieRecommendations.innerHTML = '<p class="empty-state">Loading mood-based movies...</p>';
             loadMoreBtn.style.display = 'none';
         }
 
-        // Use OMDB for genre search (less accurate than TMDB for genre discovery)
-        const genreSearchTerm = genres[0]; // Use the first genre as the search term
-        const omdbUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&s=${encodeURIComponent(genreSearchTerm)}&type=movie&page=${page}`;
-        console.log('OMDB Genre Search URL:', omdbUrl);
+        const searchTerms = getSearchTerms(genres, moodKey);
+        if (searchTerms.length === 0) {
+            movieRecommendations.innerHTML = '<p class="empty-state">No search terms available for this mood yet.</p>';
+            updateStatus('We could not determine the right keywords for this mood. Try another selection.', 'warning');
+            updateResultCount(0);
+            return;
+        }
 
         try {
-            const omdbResponse = await fetch(omdbUrl);
-            const omdbData = await omdbResponse.json();
+            const searchResults = await Promise.all(searchTerms.map(term => searchOmdbByTerm(term, page)));
+            const aggregatedMovies = searchResults.flatMap(result => result.movies);
 
-            if (omdbData.Response === "True" && omdbData.Search) {
-                const moviePromises = omdbData.Search.map(async movie => {
-                    return fetchOmdbMovieDetails(movie.imdbID, movie.Title, movie.Year);
-                });
-
-                const omdbMovies = (await Promise.all(moviePromises)).filter(movie => movie !== null);
-                const newOmdbMovies = omdbMovies.filter(movie => movie.Response === "True" && !displayedMovieIds.has(movie.imdbID));
-
-                newOmdbMovies.forEach(movie => displayedMovieIds.add(movie.imdbID));
-
-                if (append) {
-                    currentMovies = [...currentMovies, ...newOmdbMovies];
-                } else {
-                    currentMovies = newOmdbMovies;
+            const uniqueSearchMovies = aggregatedMovies.filter(movie => {
+                const isNew = movie?.imdbID && !displayedMovieIds.has(movie.imdbID);
+                if (isNew) {
+                    displayedMovieIds.add(movie.imdbID);
                 }
+                return isNew;
+            });
 
-                applyFiltersAndSort(); // Display and apply filters/sort
-                if (!append && mood) {
-                    addToHistory(mood, genres.join(', '));
-                }
-
-                // OMDB has a totalResults field, but no direct page count. Estimate pages.
-                const totalResults = parseInt(omdbData.totalResults);
-                const moviesPerPage = omdbData.Search.length; // Assuming 10 movies per page from OMDB
-                const totalPages = Math.ceil(totalResults / moviesPerPage);
-
-                if (page < totalPages) {
-                    loadMoreBtn.style.display = 'block';
-                } else {
-                    loadMoreBtn.style.display = 'none';
-                }
-
-            } else {
-                movieRecommendations.innerHTML = `<p class="empty-state">Could not find movies for the mood: ${mood}. Please try another.</p>`;
-                updateResultCount(0);
-                updateStatus(`No results found for the mood "${mood}". Try a different mood or search term.`, 'warning');
+            if (uniqueSearchMovies.length === 0 && append) {
+                updateStatus('You have seen all results that match this mood.', 'warning');
                 loadMoreBtn.style.display = 'none';
+                return;
             }
+
+            if (uniqueSearchMovies.length === 0) {
+                movieRecommendations.innerHTML = `<p class="empty-state">Could not find movies for ${mood || 'this selection'}. Please try another.</p>`;
+                updateResultCount(0);
+                updateStatus(`No results found for "${mood || 'this selection'}". Try a different mood or search term.`, 'warning');
+                loadMoreBtn.style.display = 'none';
+                return;
+            }
+
+            const moviePromises = uniqueSearchMovies.map(async movie => {
+                return fetchOmdbMovieDetails(movie.imdbID, movie.Title, movie.Year);
+            });
+
+            const detailedMovies = (await Promise.all(moviePromises)).filter(movie => movie && movie.Response === "True");
+
+            if (append) {
+                const deduped = detailedMovies.filter(movie => !currentMovies.some(existing => existing.imdbID === movie.imdbID));
+                currentMovies = [...currentMovies, ...deduped];
+            } else {
+                currentMovies = detailedMovies;
+            }
+
+            applyFiltersAndSort(); // Display and apply filters/sort
+            if (!append && mood) {
+                addToHistory(mood, genres.join(', '));
+            }
+
+            const hasMoreResults = searchResults.some(result => {
+                const total = result.totalResults;
+                if (!total) return false;
+                return page * 10 < total;
+            });
+
+            loadMoreBtn.style.display = hasMoreResults ? 'block' : 'none';
         } catch (error) {
             console.error('Error fetching movies from OMDB:', error);
             movieRecommendations.innerHTML = '<p class="empty-state">An error occurred while fetching movie recommendations. Please check your internet connection or try again later.</p>';
@@ -261,27 +306,52 @@ document.addEventListener('DOMContentLoaded', () => {
             const posterUrl = movie.Poster && movie.Poster !== 'N/A'
                 ? movie.Poster.replace('http://', 'https://')
                 : 'https://via.placeholder.com/300x450/1e1e1e/ffffff?text=No+Image';
+            const plotSnippet = movie.Plot && movie.Plot !== 'N/A'
+                ? `${movie.Plot.split('. ').slice(0, 2).join('. ')}.`
+                : 'A surprise awaits—open the details for the full synopsis.';
+            const ratingText = movie.imdbRating && movie.imdbRating !== 'N/A' ? `${movie.imdbRating}/10 IMDb` : 'Not rated yet';
+            const primaryGenre = movie.Genre ? movie.Genre.split(',')[0] : 'Genre TBD';
+
             const movieCard = document.createElement('div');
             movieCard.classList.add('movie-card');
             movieCard.innerHTML = `
-                <img src="${posterUrl}" alt="${movie.Title} poster">
-                <h3>${movie.Title}</h3>
-                <p>${movie.Year}</p>
-                <p><strong>Genre:</strong> ${movie.Genre}</p>
+                <div class="movie-card__poster">
+                    <img src="${posterUrl}" alt="${movie.Title} poster">
+                    <span class="movie-card__badge">${primaryGenre}</span>
+                </div>
+                <div class="movie-card__body">
+                    <h3>${movie.Title}</h3>
+                    <p class="movie-card__plot">${plotSnippet}</p>
+                </div>
+                <div class="movie-card__meta">
+                    <span class="movie-card__rating">⭐ ${ratingText}</span>
+                    <span class="movie-card__year">${movie.Year}</span>
+                    <button class="movie-card__cta" type="button">Details</button>
+                </div>
             `;
             movieCard.dataset.imdbid = movie.imdbID; // Store IMDb ID
             movieCard.setAttribute('role', 'listitem');
             movieCard.setAttribute('tabindex', '0');
             movieCard.setAttribute('aria-label', `${movie.Title} released in ${movie.Year}`);
-            movieCard.addEventListener('click', () => {
+
+            const navigateToDetails = () => {
                 window.location.href = `movie-details.html?imdbID=${movie.imdbID}`;
-            });
+            };
+
+            movieCard.addEventListener('click', navigateToDetails);
             movieCard.addEventListener('keypress', (event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
-                    window.location.href = `movie-details.html?imdbID=${movie.imdbID}`;
+                    navigateToDetails();
                 }
             });
+            const ctaButton = movieCard.querySelector('.movie-card__cta');
+            if (ctaButton) {
+                ctaButton.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    navigateToDetails();
+                });
+            }
             movieRecommendations.appendChild(movieCard);
         });
     }
@@ -463,6 +533,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearResults() {
         currentMovies = [];
         displayedMovieIds.clear();
+        currentMoodKey = null;
+        currentMoodGenres = [];
         resetActiveStates();
         setLastSelection('none', '');
         movieRecommendations.innerHTML = '<p class="empty-state">Pick a mood or search to see personalized recommendations.</p>';
