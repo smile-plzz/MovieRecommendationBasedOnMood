@@ -63,6 +63,58 @@
         "Adult": {
             "genres": ["Drama", "Romance", "Crime", "Psychological Thriller", "Biopic"],
             "keywords": ["mature", "provocative", "sensual", "complex", "gritty"]
+        },
+        "Wired": {
+            "genres": ["Thriller", "Action", "Sci-Fi", "Cyberpunk"],
+            "keywords": ["fast-paced", "high energy", "intense", "futuristic", "complex plot"]
+        },
+        "Vengeful": {
+            "genres": ["Revenge", "Action", "Crime", "Neo-Noir"],
+            "keywords": ["retribution", "dark justice", "unrelenting", "payback", "gritty"]
+        },
+        "Goofy": {
+            "genres": ["Slapstick Comedy", "Animation", "Parody", "Cult"],
+            "keywords": ["absurd", "silly", "zany", "nonsensical", "laugh out loud"]
+        },
+        "Eerie": {
+            "genres": ["Horror", "Psychological Thriller", "Gothic", "Mystery"],
+            "keywords": ["foreboding", "unsettling", "atmospheric", "suspenseful", "chilling"]
+        },
+        "Empowered": {
+            "genres": ["Biography", "Drama", "Action", "Inspirational"],
+            "keywords": ["strong female lead", "triumph", "courage", "overcoming obstacles", "determination"]
+        },
+        "Jaded": {
+            "genres": ["Neo-Noir", "Crime", "Thriller", "Cynical Comedy"],
+            "keywords": ["skeptical", "world-weary", "dark humor", "pessimistic", "anti-hero"]
+        },
+        "Awestruck": {
+            "genres": ["Sci-Fi", "Fantasy", "Epic", "Nature Documentary"],
+            "keywords": ["mind-blowing", "spectacular", "grand scale", "magical", "immersive"]
+        },
+        "Challenged": {
+            "genres": ["Psychological Thriller", "Mystery", "Mind-Bender", "Complex Drama"],
+            "keywords": ["puzzle", "cerebral", "complex", "thought-provoking", "decode"]
+        },
+        "Giddy": {
+            "genres": ["Romantic Comedy", "Screwball Comedy", "Musical", "Lighthearted Animation"],
+            "keywords": ["euphoric", "bubbly", "hilarious", "excitable", "charming"]
+        },
+        "Focused": {
+            "genres": ["Documentary", "Historical", "Biopic", "Intense Drama"],
+            "keywords": ["detailed", "analytical", "uninterrupted", "fact-based", "in-depth"]
+        },
+        "Escapist": {
+            "genres": ["Fantasy", "Sci-Fi", "High Adventure", "Musical"],
+            "keywords": ["otherworldly", "distraction", "pure imagination", "spectacle", "immersive world"]
+        },
+        "Intrigued": {
+            "genres": ["Mystery", "Spy Thriller", "Conspiracy", "Period Mystery"],
+            "keywords": ["secrets", "unraveling", "hidden agenda", "investigation", "whodunit"]
+        },
+        "Tense": {
+            "genres": ["Thriller", "Suspense", "Survival", "Psychological Horror"],
+            "keywords": ["high stakes", "nerve-wracking", "tight spot", "pressure", "suspenseful buildup"]
         }
     }
 }
