@@ -9,6 +9,10 @@
 </head>
 <body>
     <div class="container">
+        <nav class="details-nav">
+            <a href="index.html" class="back-link">← Back to Recommendations</a>
+            <a href="favorites.html" class="nav-link">❤️ My Favorites</a>
+        </nav>
         <h1 id="movie-title">Loading Movie Details...</h1>
         <div class="movie-details-container">
             <div class="movie-poster-column">
@@ -43,7 +47,6 @@
                 </div>
             </div>
         </div>
-        <p><a class="back-link" href="index.html">Back to Recommendations</a></p>
     </div>
 
     <script>
@@ -64,7 +67,7 @@
 
                     if (movie.Response === "True") {
                         document.getElementById('movie-title').textContent = `${movie.Title}`;
-                        document.getElementById('movie-poster').src = movie.Poster.replace('http://', 'https://');
+                        document.getElementById('movie-poster').src = (movie.Poster && movie.Poster !== 'N/A') ? movie.Poster.replace('http://', 'https://') : 'https://via.placeholder.com/300x450/1e1e1e/ffffff?text=No+Image';
                         document.getElementById('movie-poster').alt = `${movie.Title} Poster`;
                         document.getElementById('movie-year').textContent = movie.Year;
                         document.getElementById('movie-rated').textContent = movie.Rated;
@@ -158,11 +161,11 @@
                 } catch (error) {
                     console.error('Error fetching movie details:', error);
                     document.getElementById('movie-title').textContent = 'Error';
-                    document.getElementById('movie-details-content').innerHTML = `<p>An error occurred while loading movie details.</p>`;
+                    document.querySelector('.movie-details-container').innerHTML = '<p>An error occurred while loading movie details.</p>';
                 }
             } else {
                 document.getElementById('movie-title').textContent = 'No Movie Selected';
-                document.getElementById('movie-details-content').innerHTML = `<p>Please select a movie from the recommendations page.</p>`;
+                document.querySelector('.movie-details-container').innerHTML = '<p>Please select a movie from the recommendations page.</p>';
             }
         });
     </script>

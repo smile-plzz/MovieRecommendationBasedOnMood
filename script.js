@@ -94,13 +94,22 @@ document.addEventListener('DOMContentLoaded', () => {
     updateResultCount(0);
     setLastSelection('none', '');
 
+    let currentSearchTerm = null; // Track active general search term
+    let currentSearchPage = 1;   // Track page for general search
+    let currentSearchTotal = 0;  // Track total results for general search
+
     // Event Listeners for sort and filter
     sortBySelect.addEventListener('change', applyFiltersAndSort);
     filterTextInput.addEventListener('input', applyFiltersAndSort);
     loadMoreBtn.addEventListener('click', () => {
-        currentPage++;
-        const label = lastSelection.label || (currentMoodGenres[0] || 'selection');
-        findMoviesByGenre(currentMoodGenres, label, currentPage, true, currentMoodKey); // Pass true to append movies
+        if (lastSelection.type === 'search' && currentSearchTerm) {
+            currentSearchPage++;
+            searchAllMovies(currentSearchTerm, currentSearchPage, true);
+        } else {
+            currentPage++;
+            const label = lastSelection.label || (currentMoodGenres[0] || 'selection');
+            findMoviesByGenre(currentMoodGenres, label, currentPage, true, currentMoodKey);
+        }
     });
 
     clearResultsBtn.addEventListener('click', () => {
@@ -122,9 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
             resetActiveStates();
             currentMoodKey = null;
             currentMoodGenres = [];
+            currentSearchPage = 1;
             setLastSelection('search', searchTerm);
             updateStatus(`Searching for "${searchTerm}"...`, 'loading');
-            searchAllMovies(searchTerm);
+            searchAllMovies(searchTerm, 1, false);
         }
     });
 
@@ -135,9 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetActiveStates();
                 currentMoodKey = null;
                 currentMoodGenres = [];
+                currentSearchPage = 1;
                 setLastSelection('search', searchTerm);
                 updateStatus(`Searching for "${searchTerm}"...`, 'loading');
-                searchAllMovies(searchTerm);
+                searchAllMovies(searchTerm, 1, false);
             }
         }
     });
@@ -405,33 +416,50 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function searchAllMovies(searchTerm) {
-        movieRecommendations.innerHTML = '<p class="empty-state">Searching for movies...</p>';
-        loadMoreBtn.style.display = 'none';
-        currentMovies = []; // Clear current mood-based movies
-        displayedMovieIds.clear(); // Clear displayed movies for new search
+    async function searchAllMovies(searchTerm, page = 1, append = false) {
+        if (!append) {
+            movieRecommendations.innerHTML = '<p class="empty-state">Searching for movies...</p>';
+            loadMoreBtn.style.display = 'none';
+            currentMovies = [];
+            displayedMovieIds.clear();
+        }
+        currentSearchTerm = searchTerm;
 
         try {
-            const omdbSearchUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&s=${encodeURIComponent(searchTerm)}&type=movie`;
+            const omdbSearchUrl = `https://www.omdbapi.com/?apikey=${omdbApiKey}&s=${encodeURIComponent(searchTerm)}&type=movie&page=${page}`;
             const response = await fetch(omdbSearchUrl);
             const data = await response.json();
 
             if (data.Response === "True" && data.Search) {
+                currentSearchTotal = parseInt(data.totalResults, 10) || data.Search.length;
+
                 const moviePromises = data.Search.map(async movie => {
                     return fetchOmdbMovieDetails(movie.imdbID, movie.Title, movie.Year);
                 });
 
                 const omdbMovies = (await Promise.all(moviePromises)).filter(movie => movie !== null);
                 const newOmdbMovies = omdbMovies.filter(movie => movie.Response === "True" && !displayedMovieIds.has(movie.imdbID));
-
                 newOmdbMovies.forEach(movie => displayedMovieIds.add(movie.imdbID));
 
-                currentMovies = newOmdbMovies;
+                if (append) {
+                    currentMovies = [...currentMovies, ...newOmdbMovies];
+                } else {
+                    currentMovies = newOmdbMovies;
+                }
+
                 applyFiltersAndSort();
+
+                const hasMore = page * 10 < currentSearchTotal;
+                loadMoreBtn.style.display = hasMore ? 'block' : 'none';
             } else {
-                movieRecommendations.innerHTML = `<p class="empty-state">No movies found for "${searchTerm}".</p>`;
-                updateResultCount(0);
-                updateStatus(`We couldn’t find matches for "${searchTerm}". Try another title or pick a mood.`, 'warning');
+                if (!append) {
+                    movieRecommendations.innerHTML = `<p class="empty-state">No movies found for "${searchTerm}".</p>`;
+                    updateResultCount(0);
+                    updateStatus(`We couldn't find matches for "${searchTerm}". Try another title or pick a mood.`, 'warning');
+                } else {
+                    updateStatus('You have seen all results for this search.', 'warning');
+                    loadMoreBtn.style.display = 'none';
+                }
             }
         } catch (error) {
             console.error('Error searching all movies:', error);
@@ -535,6 +563,9 @@ document.addEventListener('DOMContentLoaded', () => {
         displayedMovieIds.clear();
         currentMoodKey = null;
         currentMoodGenres = [];
+        currentSearchTerm = null;
+        currentSearchPage = 1;
+        currentSearchTotal = 0;
         resetActiveStates();
         setLastSelection('none', '');
         movieRecommendations.innerHTML = '<p class="empty-state">Pick a mood or search to see personalized recommendations.</p>';

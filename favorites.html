@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Favorites — Movie Mood Recommender</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="favorites-header">
+        <div class="hero">
+            <h1>❤️ My Favorites</h1>
+            <p>Movies you've saved for later — your personal watchlist.</p>
+            <nav class="header-nav" aria-label="Main navigation">
+                <a href="index.html" class="nav-link">🎬 Back to Recommendations</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="favorites-wrapper">
+        <div class="favorites-controls" id="favorites-controls" style="display:none;">
+            <span class="favorites-count-badge" id="fav-count-badge">0 saved</span>
+            <button class="ghost-btn" id="clear-all-btn" type="button">🗑️ Clear All Favorites</button>
+        </div>
+
+        <div id="favorites-container">
+            <!-- Favorites cards injected here -->
+        </div>
+    </main>
+
+    <script>
+        window.OMDB_API_KEY = '1a944117';
+        const omdbApiKey = window.OMDB_API_KEY;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const container = document.getElementById('favorites-container');
+            const countBadge = document.getElementById('fav-count-badge');
+            const controls = document.getElementById('favorites-controls');
+            const clearAllBtn = document.getElementById('clear-all-btn');
+
+            function getFavorites() {
+                return JSON.parse(localStorage.getItem('favoriteMovies')) || [];
+            }
+
+            function saveFavorites(favs) {
+                localStorage.setItem('favoriteMovies', JSON.stringify(favs));
+            }
+
+            function removeFavorite(imdbID) {
+                let favs = getFavorites().filter(f => f.imdbID !== imdbID);
+                saveFavorites(favs);
+                renderFavorites();
+            }
+
+            function renderFavorites() {
+                const favs = getFavorites();
+                container.innerHTML = '';
+
+                if (favs.length === 0) {
+                    controls.style.display = 'none';
+                    container.innerHTML = `
+                        <div class="favorites-empty">
+                            <span class="empty-icon">🎬</span>
+                            <h2>Your watchlist is empty</h2>
+                            <p>Browse movies and hit <strong>Add to Favorites</strong> on any details page to save them here.</p>
+                            <a href="index.html" class="back-link">Find movies to save →</a>
+                        </div>`;
+                    return;
+                }
+
+                controls.style.display = 'flex';
+                const label = favs.length === 1 ? '1 saved' : `${favs.length} saved`;
+                countBadge.textContent = label;
+
+                const grid = document.createElement('div');
+                grid.className = 'favorites-grid';
+
+                favs.forEach(movie => {
+                    const posterUrl = (movie.Poster && movie.Poster !== 'N/A')
+                        ? movie.Poster.replace('http://', 'https://')
+                        : 'https://via.placeholder.com/300x450/1e1e1e/ffffff?text=No+Image';
+
+                    const card = document.createElement('div');
+                    card.className = 'fav-card';
+                    card.innerHTML = `
+                        <img class="fav-card__poster" src="${posterUrl}" alt="${movie.Title} poster" loading="lazy">
+                        <div class="fav-card__body">
+                            <p class="fav-card__title">${movie.Title}</p>
+                            <p class="fav-card__year">${movie.Year || ''}</p>
+                        </div>
+                        <div class="fav-card__actions">
+                            <button class="mood-btn details-btn" data-imdbid="${movie.imdbID}" type="button">Details</button>
+                            <button class="fav-card__remove-btn remove-btn" data-imdbid="${movie.imdbID}" type="button">✕ Remove</button>
+                        </div>`;
+                    grid.appendChild(card);
+                });
+
+                container.appendChild(grid);
+
+                // Attach event listeners after rendering
+                container.querySelectorAll('.details-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        window.location.href = `movie-details.html?imdbID=${btn.dataset.imdbid}`;
+                    });
+                });
+
+                container.querySelectorAll('.remove-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        removeFavorite(btn.dataset.imdbid);
+                    });
+                });
+            }
+
+            clearAllBtn.addEventListener('click', () => {
+                if (confirm('Remove all favorites? This cannot be undone.')) {
+                    saveFavorites([]);
+                    renderFavorites();
+                }
+            });
+
+            renderFavorites();
+        });
+    </script>
+</body>
+</html>

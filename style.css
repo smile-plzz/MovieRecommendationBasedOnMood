@@ -898,3 +898,218 @@ button:focus-visible {
         padding: 0.6rem 1rem; /* Adjusted padding */
     }
 }
+/* Header navigation */
+.header-nav {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(233, 69, 96, 0.18);
+    border: 1px solid rgba(233, 69, 96, 0.5);
+    color: #fff;
+    padding: 0.6rem 1.6rem;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(233, 69, 96, 0.2);
+    backdrop-filter: blur(6px);
+}
+
+.nav-link:hover,
+.nav-link:focus {
+    background: rgba(233, 69, 96, 0.4);
+    border-color: rgba(233, 69, 96, 0.85);
+    transform: translateY(-2px);
+    box-shadow: 0 14px 28px rgba(233, 69, 96, 0.35);
+    color: #fff;
+    text-decoration: none;
+}
+
+/* Movie details page top nav */
+.details-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.details-nav .back-link {
+    margin-top: 0;
+}
+
+/* Favorites page */
+.favorites-header {
+    background: linear-gradient(135deg, rgba(25, 42, 86, 0.85), rgba(233, 69, 96, 0.55));
+    padding: 3.5rem 1.5rem 2.5rem;
+    text-align: center;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(12px);
+}
+
+.favorites-header h1 {
+    font-size: 3rem;
+    margin-bottom: 0.6rem;
+    text-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+}
+
+.favorites-header p {
+    font-size: 1.1rem;
+    color: rgba(255,255,255,0.8);
+}
+
+.favorites-wrapper {
+    max-width: 1400px;
+    margin: 3rem auto;
+    padding: 2.5rem;
+}
+
+.favorites-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.favorites-count-badge {
+    background: radial-gradient(circle at 20% 20%, rgba(233, 69, 96, 0.4), rgba(83, 52, 131, 0.4));
+    border-radius: 999px;
+    padding: 0.4rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.5px;
+    box-shadow: 0 10px 20px rgba(233, 69, 96, 0.3);
+}
+
+.favorites-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.8rem;
+}
+
+.fav-card {
+    background: rgba(12, 18, 38, 0.88);
+    border: 1px solid rgba(130, 150, 255, 0.2);
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.3s ease;
+    box-shadow: 0 20px 40px rgba(8, 12, 26, 0.55);
+}
+
+.fav-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    box-shadow: 0 30px 55px rgba(8, 10, 30, 0.55);
+    border-color: rgba(233, 69, 96, 0.5);
+}
+
+.fav-card__poster {
+    width: 100%;
+    aspect-ratio: 2/3;
+    object-fit: cover;
+}
+
+.fav-card__body {
+    padding: 1.2rem 1.4rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.fav-card__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f6f7ff;
+    margin: 0;
+}
+
+.fav-card__year {
+    font-size: 0.85rem;
+    color: #9da4b8;
+}
+
+.fav-card__actions {
+    display: flex;
+    gap: 0.6rem;
+    padding: 0 1.4rem 1.4rem;
+    flex-wrap: wrap;
+}
+
+.fav-card__actions .mood-btn {
+    flex: 1;
+    min-width: unset;
+    padding: 0.55rem 1rem;
+    font-size: 0.85rem;
+    border-radius: 12px;
+}
+
+.fav-card__remove-btn {
+    background: rgba(233, 69, 96, 0.15);
+    border: 1px solid rgba(233, 69, 96, 0.4);
+    color: #ff8fa8;
+    padding: 0.55rem 1rem;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.fav-card__remove-btn:hover {
+    background: rgba(233, 69, 96, 0.35);
+    color: #fff;
+}
+
+.favorites-empty {
+    text-align: center;
+    padding: 5rem 2rem;
+    color: #9da4b8;
+}
+
+.favorites-empty .empty-icon {
+    font-size: 5rem;
+    display: block;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+}
+
+.favorites-empty h2 {
+    font-size: 1.8rem;
+    color: #c5cce0;
+    margin-bottom: 0.8rem;
+}
+
+.favorites-empty p {
+    font-size: 1rem;
+    max-width: 400px;
+    margin: 0 auto 2rem;
+}
+
+@media (max-width: 600px) {
+    .favorites-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+    .favorites-header h1 {
+        font-size: 2.2rem;
+    }
+    .favorites-wrapper {
+        padding: 1.2rem;
+        margin: 1.5rem auto;
+    }
+}

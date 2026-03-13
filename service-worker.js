@@ -1,10 +1,11 @@
-const CACHE_NAME = 'movie-mood-recommender-cache-v1';
+const CACHE_NAME = 'movie-mood-recommender-cache-v2';
 const urlsToCache = [
     '/',
     '/index.html',
     '/style.css',
     '/script.js',
     '/movie-details.html',
+    '/favorites.html',
     '/config.json',
     'https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap'
 ];
